@@ -4,35 +4,49 @@
 > *Design Logic Once, Validate Virtually, Fly Anywhere.*
 
 ## ⚡ What is this?
-The centralized command interface for SkyTrack. It allows engineers to design autonomous behaviors, validate them in a **Digital Twin** environment, and orchestrate mixed fleets (PX4, ArduPilot, DJI) from a single "glass pane" — eliminating the need for vendor-specific ground stations.
+The centralized command interface for SkyTrack. It serves as the **Application Plane** where engineers design **Hybrid Missions** (Visual + Code), validate reliability via **Digital Twin**, orchestrate mixed fleets, and **generate post-mission intelligence** (Reports/Maps).
 
 ## 🎯 Who this is for
 Built for **Mission Builders** & **Robotics Engineers** who need to:
-- [cite_start]**Stop rewriting code:** Abstract away hardware differences[cite: 97].
-- [cite_start]**Validate before flight:** Use physics-accurate simulation to catch logic errors[cite: 109].
-- [cite_start]**Scale operations:** Move from 1:1 piloting to 1:N fleet management[cite: 112].
+- **Stop rewriting code:** Abstract away hardware differences (PX4/DJI).
+- **Code with context:** Inject custom scripts into visual flows without rebuilding firmware.
+- **Close the Data Loop:** Automate the generation of inspection reports and maps immediately after flight.
 
 ## 🛠 Key Capabilities
-- [cite_start]**Universal Mission Orchestration:** Design complex logic (e.g., "Scan -> Detect -> Act") visually or via SDK[cite: 100].
-- [cite_start]**Sim-to-Real Parity:** Seamlessly switch between SITL (Software-in-the-loop) and real hardware without changing mission code[cite: 109].
-- [cite_start]**Live Telemetry & State:** Visualize encrypted telemetry and sensor data in real-time[cite: 136].
-- [cite_start]**Mixed Fleet Control:** Operate custom PX4 drones alongside legacy DJI assets in one unified workflow[cite: 56].
+Matches the Core Platform Capabilities defined in SkyTrack Architecture:
+- **Hybrid Mission Architecture:** The best of both worlds. Design mission flow using **Visual Logic Blocks** for speed, OR inject **Custom Python/C++ Nodes** for complex algorithmic logic.
+- **Digital Twin & Environmental Intelligence:** A unified 3D environment for **Instant Sim2Real Validation**. Visualize **3D Reality Layers** (LiDAR/Maps) to plan missions with context-aware precision.
+- **Universal Hardware Abstraction:** The "Write Once, Fly Anywhere" layer. Deploy the same mission logic to custom Pixhawk drones or legacy DJI fleets via the unified control plane.
+- **Automated Reporting & Analytics:** Turn telemetry into value. Automatically generate **Compliance Reports**, **Crop Health Maps**, or **Inspection Logs** immediately upon mission completion.
 
 ## 🔄 The Sim-to-Real Workflow
-1. **Design:** Define mission intent using high-level logic blocks.
-2. [cite_start]**Validate:** One-click launch into **SkyTrack Digital Twin** to verify safety logic[cite: 127].
-3. [cite_start]**Deploy:** Push signed, encrypted mission packages to the Edge OS[cite: 128].
-4. **Operate:** Monitor fleet health and intervene only when necessary.
+1. **Design:** Define intent using Visual Blocks or **inject custom code** via the embedded IDE.
+2. **Validate:** Trigger **Instant Sim2Real Validation** to test edge cases (e.g., "What if battery < 20%?") in the Digital Twin.
+3. **Deploy:** Push to the **Universal Hardware Abstraction** layer on the physical fleet.
+4. **Operate & Analyze:** Monitor secure live telemetry and receive **Automated Mission Reports** post-flight.
+
 
 ## 🧩 Architecture Context
 How this component fits into the SkyTrack Ecosystem:
 
 ```mermaid
-graph LR
-    A[Mission Studio] -->|Intent & Logic| B(Core Orchestration)
-    B -->|Commands| C[Device Bridge / Edge OS]
-    C -->|Telemetry| A
-    C -.->|Simulated Data| D[Digital Twin]
+graph TD
+    %% Define Nodes
+    Studio["Mission Studio (Application Plane)"]
+    Core["Core Orchestration (Orchestration Plane)"]
+    HAL["Universal Hardware Abstraction (Execution Plane)"]
+    
+    subgraph Targets [Deployment Targets]
+        Real["Physical Hardware"]
+        Sim["Digital Twin Engine"]
+    end
 
-## 🚧 Project Status
-Current Phase: Alpha (Build for Builders). Active development focused on core mission stability and PX4/MAVLink integration. Interfaces may change.
+    %% Define Relationships
+    Studio <-->|Intent & Logs| Core
+    Core <-->|Signed Commands| HAL
+    HAL -->|Real Control| Real
+    HAL -.->|Simulated Physics| Sim
+
+    %% Styling (Optional - for better visibility in dark mode)
+    classDef plain fill:#fff,stroke:#333,stroke-width:2px,color:#000;
+    class Studio,Core,HAL plain;
